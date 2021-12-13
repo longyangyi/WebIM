@@ -1,0 +1,206 @@
+<html>
+
+<head>
+    <title>群聊</title>
+    <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
+
+    <script type="text/javascript">
+        var uid;
+        var groupid;
+        var token;
+        var uname;
+        var frienduname;
+        window.onload = function () {
+            var arr = window.location.toString().split('=');
+            uid = arr[1].split('&')[0];
+            groupid = arr[2].split('&')[0];
+            token = arr[3];
+
+            $.post('/getgroupinfo', {uid: uid}, function (data, result) {
+                uname = data.data[0].uname;
+                $.post('/getuserinfo', {uid: frienduid}, function (data, result) {
+                    frienduname = data.data[0].uname;
+                    //console.log(uname, frienduname);
+                    //console.log(data);
+                    document.getElementById("uname").innerHTML = "我的昵称：" + uname;
+                    document.getElementById("frienduname").innerHTML = "好友昵称：" + frienduname;
+                    readMessage();
+                });
+            });
+        }
+
+        function add0(m) {
+            return m < 10 ? '0' + m : m
+        }
+
+        function format(shijianchuo) {
+            var time = new Date(shijianchuo * 1000);
+            var y = time.getFullYear();
+            var m = time.getMonth() + 1;
+            var d = time.getDate();
+            var h = time.getHours();
+            var mm = time.getMinutes();
+            var s = time.getSeconds();
+            return y + '-' + add0(m) + '-' + add0(d) + ' ' + add0(h) + ':' + add0(mm) + ':' + add0(s);
+        }
+
+        function readMessage() {
+            $.post('/readmessage', {group: groupid}, function (data, result) {
+                //console.log(data);
+                if (data.code == '200') {
+                    //console.log(data.data);
+
+                    var str = "<tr class='trClass' style='background-color: aqua'><td>发送方</td><td>消息</td><td>时间</td></tr>";
+                    for (x in data.data) {
+                        if (data.data[x].isimg == "1") {
+                            str += "<tr class='trClass'><td>" + data.data[x].uid1 + "</td>" + "<td>" + "<img class='pic' style='height: 100px; width: 100px' alt='略缩图' src='data:image/png;base64," + data.data[x].message + "'></td><td>" + format(data.data[x].time) + "</td></tr>";
+                        } else {
+                            str += "<tr class='trClass'><td>" + data.data[x].uid1 + "</td><td>" + data.data[x].message + "</td><td>" + format(data.data[x].time) + "</td></tr>";
+                        }
+                    }
+                    document.getElementById("messageTable").innerHTML = str;
+
+                } else {
+                    alert(data.msg)
+                }
+            });
+        }
+
+        //setInterval(readMessage, 1000);
+
+
+        //var socketuri = 'ws://localhost:3001';
+        var socketuri = "ws://" + window.location.host.split(':')[0] + ':3001';
+        var websocket = new WebSocket(socketuri);
+        websocket.onopen = function (evt) {
+            console.log('onopen');
+            var msgObj = {uid1: uid};
+            var msgJson = JSON.stringify(msgObj);
+            websocket.send(msgJson);
+        };
+        websocket.onmessage = function (evt) {
+            console.log(evt);
+            console.log('onmessage:' + evt.data);
+            readMessage();
+        };
+        websocket.onclose = function (evt) {
+            console.log('onclose');
+        }
+
+        function socketSend() {
+
+            var msgObj = {
+                uid1: uid,
+                uid2: groupid,
+                token: token,
+                message: document.getElementById("chatInput").value,
+                isimg: 0,
+                isgroup: 1
+            };
+
+            var msgJson = JSON.stringify(msgObj);
+
+            websocket.send(msgJson);
+            readMessage();
+        }
+
+        function returnMain() {
+            window.location.replace("/main?uid=" + uid + "&token=" + token);
+        }
+
+        function previewFile() {
+            var preview = document.querySelector('img');
+            var file = document.querySelector('input[type=file]').files[0];
+            console.log(file);
+
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                preview.src = reader.result;
+            }
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "";
+            }
+
+        }
+
+        function socketSendImg() {
+
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                var msgObj = {uid1: uid, uid2: groupid, token: token, message: reader.result, isimg: 1, isgroup: 1};
+                var msgJson = JSON.stringify(msgObj);
+                websocket.send(msgJson);
+            }
+            var file = document.querySelector('input[type=file]').files[0];
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+            setTimeout(readMessage, 1000);
+            setTimeout(readMessage, 2000);
+            setTimeout(readMessage, 10000);
+        }
+
+    </script>
+
+    <style type="text/css">
+        .buttonClass {
+            width: 120px;
+            height: 40px;
+            background-color: lightskyblue;
+        }
+
+        .trClass {
+            height: 50px;
+            background-color: white;
+        }
+
+        * {
+            font-size: 20px;
+            border-radius: 10px;
+        }
+    </style>
+
+</head>
+
+<body style="background-color: beige">
+
+<h1 style="text-align: center; font-size: 50px;">群聊</h1>
+<hr>
+
+
+<input type="button" class="buttonClass" value="返回" onclick="returnMain()">
+
+
+<h2 id="uname"></h2>
+<h2 id="groupuname"></h2>
+
+<div id="chatDiv" style="text-align: center">
+    <input type="text" id="chatInput" style="height: 30px;">
+    <input type="button" class="buttonClass" id="sendButton" value="发送" style="display: none">
+    <input type="button" id="readButton" onclick="readMessage()" value="读取消息" style="display: none">
+    <input type="button" class="buttonClass" id="socketSend" onclick="socketSend()" value="发送消息">
+</div>
+
+<div style="text-align: center">
+    <input type="file" id="fileInput" name="image" onchange="previewFile()">
+    <img class="pic" alt="略缩图" style="height: 100px; width: 100px; " id="showImg" src="blank.png">
+    <input type="button" class="buttonClass" id="sendImg" value="发送图片" onclick="socketSendImg()">
+</div>
+<hr>
+<div id="messageDiv" style="text-align: center">
+    <h1>消息列表</h1>
+
+    <table id="messageTable" style="text-align: center; width: 100%;">
+        <tr class='trClass' style='background-color: aqua'>
+            <td>发送方</td>
+            <td>消息</td>
+            <td>时间</td>
+        </tr>
+    </table>
+</div>
+
+</body>
+
+</html>

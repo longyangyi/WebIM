@@ -1,0 +1,41 @@
+<html>
+
+<head>
+  <title>欢迎</title>
+  <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
+  <script type="text/javascript">
+
+      function loginClick() {
+          //console.log($("#uid").val());
+          $.post('/login_post', {uid: $("#uid").val(), pwd: $("#pwd").val()}, function (data, status) {
+
+              if (data.code == '200') {
+                  console.log('login success');
+                  window.location.replace("http://localhost:3000/main?uid=" + data.data['uid'] + "&token=" + data.data['token']);
+              } else {
+                  alert('登陆失败：' + data.msg);
+              }
+          });
+      }
+
+      function registerClick() {
+          window.location.replace("http://localhost:3000/register");
+      }
+
+  </script>
+
+</head>
+
+<body>
+
+<form id="loginForm">
+  <input type="text" id="uid" name="uid">
+  <input type="password" id="pwd" name="pwd">
+  <input type="button" id="loginButton" value="登陆" onclick="loginClick()">
+  <input type="button" id="registerButton" value="注册" onclick="registerClick()">
+</form>
+
+
+</body>
+
+</html>
