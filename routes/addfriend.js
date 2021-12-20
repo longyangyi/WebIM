@@ -24,8 +24,8 @@ router.post('/', function (req, res, next) {
             });
             return;
         }
-        sql = 'select * from user where uid=?';
-        para = [reqData.uid2];
+        sql = 'select uname from user where uid = ?';
+        para = [reqData.uid1];
         connection.query(sql, para, function (err, result2) {
             if (err) {
                 res.send(err.message);
@@ -34,28 +34,28 @@ router.post('/', function (req, res, next) {
                 if (result2 == "") {
                     res.send({
                         code: '201',
-                        msg: 'frend uid does not exists'
+                        msg: 'uid does not exists1'
                     });
                     return;
                 } else {
-                    sql = 'select * from friend where (uid1=? and uid2=?) or (uid1=? and uid2=?)';
-                    para = [reqData.uid1, reqData.uid2, reqData.uid1, reqData.uid2];
-                    connection.query(sql, para, function (err, result) {
+                    sql = 'select uname from user where uid = ?';
+                    para = [reqData.uid2];
+                    connection.query(sql, para, function (err, result3) {
                         if (err) {
                             res.send(err.message);
                             return;
                         }
-                        if (result != '') {
+                        if (result3 == '') {
                             res.send({
                                 code: 201,
-                                msg: 'friend exists'
+                                msg: 'uid does not exists2'
                             });
                             return;
                         } else {
                             if (tokenResult[0].uid == reqData.uid1) {
-                                sql = 'insert into friend values(?, ?)';
-                                para = [reqData.uid1, reqData.uid2];
-                                connection.query(sql, para, function (err, result3) {
+                                sql = 'insert into friend values(?, ?, ?, ?)';
+                                para = [reqData.uid1, reqData.uid2, result2[0].uname, result3[0].uname];
+                                connection.query(sql, para, function (err, result4) {
                                     if (err) {
                                         res.send(err.message);
                                         return;

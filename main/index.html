@@ -18,6 +18,7 @@
             $.post('/getuserinfo', {uid: uid}, function (data, result) {
                 uname = data.data[0].uname;
                 document.getElementById("uname").innerHTML = "昵称：" + uname;
+                document.getElementById("uid").innerHTML = "ID：" + uid;
             });
             getfriendlist(token);
             getgrouplist(token);
@@ -104,6 +105,7 @@
 
 <h1 style="text-align: center; font-size: 50px;">主界面</h1>
 <h2 id="uname" style="font-size: 30px"></h2>
+<h2 id="uid" style="font-size: 30px"></h2>
 <hr>
 
 <p style="font-size: 10px; color: grey; text-align: right;">功能区</p>

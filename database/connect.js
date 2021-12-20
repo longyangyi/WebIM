@@ -52,7 +52,8 @@ uid1 varchar(20) not null references user(uid),
 uid2 varchar(20),
 message varchar(200) not null,
 time varchar(10) not null,
-..............
+isimg int,
+isgroup int
 );
 
 create table chatgroup
