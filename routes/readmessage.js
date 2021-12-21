@@ -8,7 +8,7 @@ var connection = require('../database/connect');
 router.post('/', function(req, res, next) {
 
     let reqData = req.body;
-    //console.log(reqData);
+    console.log('readmessage: ', reqData);
     let sql = 'select * from message where (uid1=? and uid2=?) or (uid1=? and uid2=?)';
     let para = [reqData.uid1, reqData.uid2, reqData.uid2, reqData.uid1];
 

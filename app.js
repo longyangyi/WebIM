@@ -3,22 +3,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
-var registerRouter = require('./routes/register');
-var loginRouter = require('./routes/login');
-var logoutRouter = require('./routes/logout');
-var addfriendRouter = require('./routes/addfriend');
-var addgroupRouter = require('./routes/addgroup');
-var getfriendlistRouter = require('./routes/getfriendlist');
-var getgrouplistRouter = require('./routes/getgrouplist');
-var getuserinfoRouter = require('./routes/getuserinfo');
-
-var sendmessageRouter = require('./routes/sendmessage');
-var readmessageRouter = require('./routes/readmessage');
-var socketmessageRouter = require('./routes/socketmessage');
-
 
 var app = express();
 
@@ -26,28 +10,40 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
 app.use(express.static(path.join(__dirname, 'main')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+
+var registerRouter = require('./routes/register');
 app.use('/register_post', registerRouter);
+
+var loginRouter = require('./routes/login');
 app.use('/login_post', loginRouter);
+
+var logoutRouter = require('./routes/logout');
 app.use('/logout_post', logoutRouter);
+
+var addfriendRouter = require('./routes/addfriend');
 app.use('/addfriend', addfriendRouter);
+
+var addgroupRouter = require('./routes/addgroup');
 app.use('/addgroup', addgroupRouter);
+
+var getfriendlistRouter = require('./routes/getfriendlist');
 app.use('/getfriendlist', getfriendlistRouter);
+
+var getgrouplistRouter = require('./routes/getgrouplist');
 app.use('/getgrouplist', getgrouplistRouter);
+
+var getuserinfoRouter = require('./routes/getuserinfo');
 app.use('/getuserinfo', getuserinfoRouter);
 
-app.use('/login', express.static('login'));
-app.use('/register', express.static('register'));
-app.use('/main', express.static('main'));
-app.use('/singlechat', express.static('singlechat'));
-app.use('/groupchat', express.static('groupchat'));
-app.use('/sendmessage', sendmessageRouter);
+var readmessageRouter = require('./routes/readmessage');
 app.use('/readmessage', readmessageRouter);
 
+var socketmessageRouter = require('./routes/socketmessage');
 app.use('/socketmessage', socketmessageRouter);
+
 
 
 

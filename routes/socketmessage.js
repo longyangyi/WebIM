@@ -67,9 +67,6 @@ webSocketServer.on('connection', function (webSocket) {
         });
     });
 
-    webSocket.on("close", function (msg) {
-        console.log("socket close: ", msg);
-    })
 });
 
 module.exports = router;
