@@ -20,7 +20,7 @@ router.post('/', function(req, res, next) {
         if (result == '') {
             res.send({
                 code: 201,
-                msg: 'user does not exists',
+                msg: '账号不存在',
             });
         } else {
             //console.log(result[0]);

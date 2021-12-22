@@ -15,13 +15,13 @@ router.post('/', function(req, res, next) {
         if (err) {
             res.send({
                 code: 201,
-                msg: 'register failed'
+                msg: '注册失败'
             });
             return;
         }
         res.send({
                 code: '200',
-                msg: 'register success'
+                msg: '注册成功'
         });
     });
 

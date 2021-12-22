@@ -3,119 +3,112 @@
 <head>
     <meta charset="utf-8">
     <title>Web IM</title>
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="stylesheet" href="style/style.css">
     <script src="script/jquery-3.6.0.min.js"></script>
     <script src="script/script.js"></script>
 </head>
 <body>
-<div class="dialogue-wrapper">
-    <div class="dialogue-main">
-        <div class="dialogue-header">
-            <input class="returnFriendList" type="button" value="返回" onclick="returnFriendList()">
-            <div class="dialogue-service-info">
-
-                <div class="dialogue-service-title">
-                    <p class="dialogue-service-name" id="friendUname">XX</p>
-                </div>
-            </div>
+<div class="allPageWrapper">
+    <div class="loginPage">
+        <div class="blueHeader">
+            <p class="whiteTitle">登录</p>
         </div>
-        <div id="dialogue_contain" class="dialogue-contain">
-            <p class="dialogue-service-contain"><span class="dialogue-text dialogue-service-text">开始聊天吧！</span></p>
-        </div>
-        <div class="dialogue-submit">
-            <p id="dialogue_hint" class="dialogue-hint"><span class="dialogue-hint-icon">!</span><span
-                    class="dialogue-hint-text">发送内容不能为空</span></p>
-            <textarea id="dialogue_input" class="dialogue-input-text"
-                      placeholder="按Enter键发送"></textarea>
-            <div class="dialogue-input-tools">
-                <input type="file" id="fileInput" name="image" onchange="previewFile()" style="display: none;">
-                <img class="miniPic" alt="略缩图" id="showImg" src="default.png" onclick="chooseImg()">
-                <input type="button" class="sendImgButtonClass" id="sendImg" value="发送图片" onclick="socketSendImg()">
-            </div>
-        </div>
-    </div>
-
-    <div class="dialogue-login">
-        <div class="dialogue-header">
-            <p class="dialogue-login-title">登录</p>
-        </div>
-        <div class="divForm">
+        <div class="loginFormDiv">
             <form id="loginForm">
-                <div style="width: 300px; text-align: center; margin-top: 80px">
-                    <span style="color: black;">账号：</span>
-                    <input type="text" id="uid" name="uid" size="20" maxlength="20px" placeholder="输入账号">
+                <div class="row300pxDiv">
+                    <span class="blackTextSpan">账号：</span>
+                    <input type="text" class="inputText" id="loginUid" size="20" maxlength="20" placeholder="输入账号">
                 </div>
 
-                <div style="width: 300px; text-align: center; margin-top: 10px">
-                    <span style="color: black;">密码：</span>
-                    <input type="password" id="pwd" name="pwd" size="20" maxlength="20" placeholder="输入密码">
+                <div class="row300pxDiv">
+                    <span class="blackTextSpan">密码：</span>
+                    <input type="password" class="inputText" id="loginPwd" size="20" maxlength="20" placeholder="输入密码">
                 </div>
 
-                <div style="width: 300px; text-align: center; margin-top: 20px">
-                    <input type="button" class="buttonClass" id="loginButton" value="登陆" onclick="loginClick()">
+                <div class="row300pxDiv">
+                    <input type="button" class="bigButton" id="loginButton" value="登陆" onclick="loginClick()">
 
-                    <input type="button" class="buttonClass" id="registerButton" value="注册" onclick="goRegisterClick()"
-                           style="margin-left: 20px">
+                    <input type="button" class="bigButton" id="goRegisterButton" value="注册" onclick="goRegisterClick()">
                 </div>
 
             </form>
         </div>
     </div>
 
-    <div class="dialogue-register">
-        <div class="dialogue-header">
-            <input class="returnLogin" type="button" value="返回" onclick="returnLogin()">
-            <p class="dialogue-register-title">注册</p>
+    <div class="registerPage">
+        <div class="blueHeader">
+            <input class="backButton" type="button" value="返回" onclick="returnLoginPage()">
+            <p class="whiteTitle">注册</p>
         </div>
         <div class="divForm">
 
             <form id="registerForm">
 
-                <div style="width: 300px; text-align: center; margin-top: 50px">
-                    <span style="color: black;">账号：</span>
-                    <input type="text" id="register_uid" name="uid" placeholder="输入账号">
+                <div class="row300pxDiv">
+                    <span class="blackTextSpan">账号：</span>
+                    <input type="text" class="inputText" id="registerUid" placeholder="输入账号">
                 </div>
 
-                <div style="width: 300px; text-align: center; margin-top: 10px">
-                    <span style="color: black;">密码：</span>
-                    <input type="password" id="register_pwd" name="pwd" placeholder="输入密码">
+                <div class="row300pxDiv">
+                    <span class="blackTextSpan">密码：</span>
+                    <input type="password" class="inputText" id="registerPwd" placeholder="输入密码">
                 </div>
 
-                <div style="width: 300px; text-align: center; margin-top: 10px">
-                    <span style="color: black;">昵称：</span>
-                    <input type="text" id="register_uname" name="uname" placeholder="输入昵称">
+                <div class="row300pxDiv">
+                    <span class="blackTextSpan">昵称：</span>
+                    <input type="text" class="inputText" id="registerUname" placeholder="输入昵称">
                 </div>
 
-                <div style="width: 300px; text-align: center; margin-top: 10px">
-                    <input type="button" class="buttonClass" id="submitButton" value="注册" onclick="registerClick()">
+                <div class="row300pxDiv">
+                    <input type="button" class="bigButton" value="注册" onclick="registerClick()">
                 </div>
 
             </form>
         </div>
     </div>
 
-    <div class="dialogue-friend-list">
-        <div class="dialogue-header">
-            <input class="returnLogin" type="button" value="退出" onclick="logout()">
-            <p class="dialogue-friend-list-title">好友列表</p>
+    <div class="friendListPage">
+        <div class="blueHeader">
+            <input class="backButton" type="button" value="退出" onclick="logoutClick()">
+            <p class="whiteTitle">好友列表</p>
         </div>
         <div class="blank10px"></div>
-        <div id="addFriendDiv" style="text-align: center">
-            <form id="addFriendForm">
-                <input type="text" id="friendid" placeholder="对方id">
-                <input type="button" class="buttonClass" id="addFriendButton" value="添加好友" onclick="addFriendClick()">
+        <div class="addFriendDiv">
+            <form class="addFriendForm">
+                <input type="text" class="inputText" id="friendId" placeholder="对方账号">
+                <input type="button" class="bigButton" value="添加好友" onclick="addFriendClick()">
             </form>
         </div>
         <div class="blank10px"></div>
 
-        <div id="dialogue-friend-list" class="dialogue-friend-list-contain">
+        <div id="friendListContainer" class="friendListContainer">
         </div>
-        <div id="myInfo" style="color: black; text-align: center">我的信息</div>
+        <div id="myInfo" class="bottomText">我的信息</div>
+    </div>
+
+    <div class="chatPage">
+        <div class="blueHeader">
+            <input class="backButton" type="button" value="返回" onclick="returnFriendListPage()">
+            <div class="friendInfoDiv">
+                <div class="friendInfoTitle">
+                    <p class="friendUname" id="friendUname">XX</p>
+                </div>
+            </div>
+        </div>
+        <div id="allMessageContainer" class="allMessageContainer">
+            <p class="messageContainer"><span class="messageText">开始聊天吧！</span></p>
+        </div>
+        <div class="sendMessageDiv">
+            <p id="noneMessageHint" class="noneMessageHint"><span class="noneMessageHintIcon">!</span><span
+                    class="noneMessageHintText">发送内容不能为空</span></p>
+            <textarea id="messageTextarea" class="messageTextarea"
+                      placeholder="按Enter键发送"></textarea>
+            <div class="sendImageDiv">
+                <input type="file" id="chooseFile" onchange="miniImagePreview()" style="display: none;">
+                <img class="miniImage" alt="选择图片" id="miniImage" src="default.png" onclick="chooseImageClick()">
+                <input type="button" class="miniButton" id="sendImage" value="发送图片" onclick="sendImageClick()">
+            </div>
+        </div>
     </div>
 </div>
 
