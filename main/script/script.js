@@ -77,6 +77,11 @@ window.onload = function () {
 
 // 注册界面
 function registerClick() {
+    if ($("#registerUid").val() == '' || $("#registerPwd").val() == '' || $("#registerUname").val() == '') {
+        alert('输入框不能为空！');
+        return;
+    }
+
     $.post('/register_post', {
         uid: $("#registerUid").val(),
         pwd: $("#registerPwd").val(),
@@ -100,7 +105,7 @@ function returnLoginPage() {
 
 
 
-// 登录界面
+// 注册界面
 function goRegisterClick() {
     $('.loginPage').css({'display': 'none'});
     $('.registerPage').css({'display': 'inline-block', 'height': '0'});
@@ -109,6 +114,12 @@ function goRegisterClick() {
 
 function loginClick() {
     //console.log($("#uid").val());
+
+    if ($("#loginUid").val() == '' || $("#loginPwd").val() == '') {
+        alert('输入框不能为空！');
+        return;
+    }
+
     $.post('/login_post', {uid: $("#loginUid").val(), pwd: $("#loginPwd").val()}, function (data, status) {
         if (data.code == '200') {
             console.log('login success');
@@ -205,6 +216,11 @@ function logoutClick() { // 退出登录
 function addFriendClick() { // 添加好友
     if (document.getElementById('friendId').value == uid) {
         alert('别添加自己啊！');
+        return;
+    }
+
+    if (document.getElementById('friendId').value == '') {
+        alert('输入框不能为空！');
         return;
     }
 
@@ -398,6 +414,8 @@ function sendImageClick() {
     var file = document.querySelector('input[type=file]').files[0];
     if (file) {
         reader.readAsDataURL(file);
+    } else {
+        alert('请先选择图片！');
     }
 }
 
