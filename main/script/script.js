@@ -16,12 +16,13 @@ var timerId;
 
 // 初始化界面
 window.onload = function () {
-    $('.loginPage').css({'display': 'inline-block', 'height': '0'});
-    $('.loginPage').animate({'height': '600px'});
-
     $('.registerPage').css({'display': 'none'});
     $('.friendListPage').css({'display': 'none'});
     $('.chatPage').css({'display': 'none'});
+
+    $('.loginPage').css({'display': 'inline-block', 'height': '0'});
+    $('.loginPage').animate({'height': '100%'});
+
 
     messageTextarea = document.getElementById('messageTextarea');
     allMessageContainer = document.getElementById('allMessageContainer');
@@ -99,8 +100,11 @@ function registerClick() {
 
 function returnLoginPage() {
     $('.registerPage').css({'display': 'none'});
+    $('.friendListPage').css({'display': 'none'});
+    $('.chatPage').css({'display': 'none'});
+
     $('.loginPage').css({'display': 'inline-block', 'height': '0'});
-    $('.loginPage').animate({'height': '600px'});
+    $('.loginPage').animate({'height': '100%'});
 }
 
 
@@ -108,8 +112,11 @@ function returnLoginPage() {
 // 注册界面
 function goRegisterClick() {
     $('.loginPage').css({'display': 'none'});
+    $('.friendListPage').css({'display': 'none'});
+    $('.chatPage').css({'display': 'none'});
+
     $('.registerPage').css({'display': 'inline-block', 'height': '0'});
-    $('.registerPage').animate({'height': '600px'});
+    $('.registerPage').animate({'height': '100%'});
 }
 
 function loginClick() {
@@ -130,9 +137,11 @@ function loginClick() {
             document.getElementById('myInfo').innerHTML = "昵称：" + uname + "<br>账号：" + uid;
 
             $('.loginPage').css({'display': 'none'});
+            $('.registerPage').css({'display': 'none'});
+            $('.chatPage').css({'display': 'none'});
 
             $('.friendListPage').css({'display': 'inline-block', 'height': '0'});
-            $('.friendListPage').animate({'height': '600px'});
+            $('.friendListPage').animate({'height': '100%'});
 
 
             friendListContainer.innerHTML = ''; // 清空好友列表
@@ -161,9 +170,14 @@ function appendFriend(_uid, _uname) { // 附加好友列表
         friendUid = _uid;
         friendUname = _uname;
         document.getElementById('friendUname').innerHTML = "好友：" + friendUname;
+
+        $('.loginPage').css({'display': 'none'});
+        $('.registerPage').css({'display': 'none'});
         $('.friendListPage').css({'display': 'none'});
+
         $('.chatPage').css({'display': 'inline-block', 'height': '0'});
-        $('.chatPage').animate({'height': '600px'}); // 进入聊天界面
+        $('.chatPage').animate({'height': '100%'}); // 进入聊天界面
+
         readMessage(); // 读取历史消息
 
         //var socketuri = 'ws://localhost:3001';
@@ -204,9 +218,13 @@ function logoutClick() { // 退出登录
     $.post('/logout_post', {token: token}, function (data, status) {
         if (data.code == '200') {
             console.log('logout success');
+
+            $('.registerPage').css({'display': 'none'});
             $('.friendListPage').css({'display': 'none'});
+            $('.chatPage').css({'display': 'none'});
+
             $('.loginPage').css({'display': 'inline-block', 'height': '0'});
-            $('.loginPage').animate({'height': '600px'});
+            $('.loginPage').animate({'height': '100%'});
         } else {
             alert('登出失败：' + data.msg);
         }
@@ -267,23 +285,37 @@ function readMessage() {
                         appendFriendMessage(data.data[x].message);
                     }
                 }
-
             }
-
         } else {
             alert(data.msg)
         }
     });
 }
 
+function timetrans(date){
+    var date = new Date(date*1000);//如果date为13位不需要乘1000
+    var Y = date.getFullYear() + '-';
+    var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+    var D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
+    var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+    var m = (date.getMinutes() <10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+    var s = (date.getSeconds() <10 ? '0' + date.getSeconds() : date.getSeconds());
+    return Y+M+D+h+m+s;
+}
+
 function appendMyMessage(message) {
 
-    var nodeP = document.createElement('p'),
-        nodeSpan = document.createElement('span');
+    var nodeP = document.createElement('p');
     nodeP.classList.add('myMessageContainer');
+
+    var nodeSpan = document.createElement('span');
     nodeSpan.classList.add('myMessageText');
     nodeSpan.innerHTML = message;
+
+
+
     nodeP.appendChild(nodeSpan);
+
     allMessageContainer.appendChild(nodeP);
     allMessageContainer.scrollTop = allMessageContainer.scrollHeight;
 }
@@ -300,8 +332,8 @@ function appendMyImg(base64) {
     img.alt = "img";
 
     nodeSpan.appendChild(img);
-
     nodeP.appendChild(nodeSpan);
+
     allMessageContainer.appendChild(nodeP);
     allMessageContainer.scrollTop = allMessageContainer.scrollHeight;
 }
@@ -313,7 +345,9 @@ function appendFriendMessage(message) {
     nodeP.classList.add('friendMessageContainer');
     nodeSpan.classList.add('friendMessageText');
     nodeSpan.innerHTML = message;
+
     nodeP.appendChild(nodeSpan);
+
     allMessageContainer.appendChild(nodeP);
     allMessageContainer.scrollTop = allMessageContainer.scrollHeight;
 }
@@ -332,14 +366,18 @@ function appendFriendImg(base64) {
     nodeSpan.appendChild(img);
 
     nodeP.appendChild(nodeSpan);
+
     allMessageContainer.appendChild(nodeP);
     allMessageContainer.scrollTop = allMessageContainer.scrollHeight;
 }
 
 function returnFriendListPage() {
+    $('.loginPage').css({'display': 'none'});
+    $('.registerPage').css({'display': 'none'});
     $('.chatPage').css({'display': 'none'});
+
     $('.friendListPage').css({'display': 'inline-block', 'height': '0'});
-    $('.friendListPage').animate({'height': '600px'});
+    $('.friendListPage').animate({'height': '100%'});
 }
 
 
